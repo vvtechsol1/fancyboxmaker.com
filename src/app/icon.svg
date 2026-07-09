@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="7" fill="#18bcaa"/>
+  <!-- 3D box -->
+  <g transform="translate(6 6)">
+    <!-- top -->
+    <path d="M10 1 L19 4.5 L10 8 L1 4.5 Z" fill="#ffffff"/>
+    <!-- left face -->
+    <path d="M1 4.5 L10 8 L10 18 L1 14.5 Z" fill="#e6fbf7"/>
+    <!-- right face -->
+    <path d="M19 4.5 L10 8 L10 18 L19 14.5 Z" fill="#c7f3ec"/>
+    <!-- lid seam -->
+    <path d="M10 8 L10 18" stroke="#18bcaa" stroke-width="0.8" opacity="0.5"/>
+  </g>
+</svg>

@@ -1,0 +1,34 @@
+[
+  {
+    "ref": "CBP-MRBZXWIJ",
+    "createdAt": "2026-07-08T11:30:29.467Z",
+    "status": "new",
+    "items": [
+      {
+        "slug": "cosmetic-boxes-corrugated-mailer-natural-kraft",
+        "name": "Corrugated Mailer Cosmetic Boxes",
+        "boxTypeName": "Cosmetic Boxes",
+        "type": "Corrugated Mailer",
+        "price": 89,
+        "colorName": "Natural Kraft",
+        "variantLabel": "100 units",
+        "qty": 1
+      }
+    ],
+    "subtotal": 89,
+    "customer": {
+      "name": "khurrams younas",
+      "email": "khurramtech23@gmail.com",
+      "phone": "03200409591",
+      "company": "Covers Valley"
+    },
+    "shipping": {
+      "address": "House no 5, street 87 Muhammadi Park Rajgarh Lahore",
+      "city": "Lahore",
+      "state": "Punjab",
+      "zip": "54000",
+      "country": "United States"
+    },
+    "notes": ""
+  }
+]

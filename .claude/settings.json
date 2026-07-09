@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/tmasl/.claude/projects/c--xampp-htdocs-customboxes/memory/**)",
+      "PowerShell($src=\"c:\\\\xampp\\\\htdocs\\\\casebazar-react\"; $dst=\"c:\\\\xampp\\\\htdocs\\\\customboxes\"; robocopy $src $dst /E /XD node_modules .next /NFL /NDD /NJH /NP /NS | Out-Null; \"robocopy exit code: $LASTEXITCODE \\(0-7 = success\\)\"; \"--- top-level of customboxes ---\"; Get-ChildItem $dst | Select-Object Name,Length | Format-Table -AutoSize)",
+      "PowerShell($src=\"c:\\\\xampp\\\\htdocs\\\\casebazar-react\"; $dst=\"c:\\\\xampp\\\\htdocs\\\\customboxes\"; robocopy $src $dst /E /XD node_modules .next /NFL /NDL /NJH /NP /NS /NC | Out-Null; \"robocopy exit code: $LASTEXITCODE \\(0-7 = success\\)\"; \"--- top-level of customboxes ---\"; Get-ChildItem $dst -Force | Select-Object Name | Format-Table -AutoSize)",
+      "Bash(ls -la data/)",
+      "Bash(rm -f data/products.json data/events.json data/presence.json data/*.json)",
+      "Bash(cat .env.local)",
+      "Bash(ls public/)",
+      "Bash(node _final.mjs)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\tmasl\\.claude\\projects\\c--xampp-htdocs-customboxes\\memory"
+    ]
+  }
+}
