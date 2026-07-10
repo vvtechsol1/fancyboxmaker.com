@@ -9,7 +9,8 @@
       "Bash(cat .env.local)",
       "Bash(ls public/)",
       "Bash(node _final.mjs)",
-      "Bash(curl -s -H \"Cookie: cb_admin=CBP-admin-2026!\" -o /dev/null -w \"settings:%{http_code}\\\\n\" --max-time 60 http://localhost:3941/api/admin/settings)"
+      "Bash(curl -s -H \"Cookie: cb_admin=CBP-admin-2026!\" -o /dev/null -w \"settings:%{http_code}\\\\n\" --max-time 60 http://localhost:3941/api/admin/settings)",
+      "Bash(curl -s --max-time 30 \"https://fancyboxmaker.com/\")"
     ],
     "additionalDirectories": [
       "c:\\Users\\tmasl\\.claude\\projects\\c--xampp-htdocs-customboxes\\memory"

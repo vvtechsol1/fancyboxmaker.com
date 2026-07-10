@@ -1,60 +1,78 @@
 import Link from "next/link";
+import { Check } from "lucide-react";
+import { COLORWAYS } from "@/data/products";
+import BoxMockup from "@/components/product/BoxMockup";
+
+const FEATURES = [
+  "Stronger brand identity",
+  "Premium visual appeal",
+  "Memorable first impression",
+  "Protects your product & promotes your brand",
+];
+
+const TILES = [
+  { box: COLORWAYS.teal, rot: "-6deg", cls: "col-span-1" },
+  { box: COLORWAYS.navy, rot: "5deg", cls: "col-span-1" },
+  { box: COLORWAYS.kraft, rot: "4deg", cls: "col-span-1" },
+  { box: COLORWAYS.red, rot: "-5deg", cls: "col-span-1" },
+];
 
 export default function BespokeCopy() {
   return (
-    <section className="bg-white py-14">
-      <div className="container-x max-w-4xl text-left">
-        <h2 className="font-display font-extrabold text-ink text-2xl md:text-3xl">
-          Bespoke Boxes That Elevate Your Brand and Increase Sales
-        </h2>
+    <section className="bg-white py-16">
+      <div className="container-x grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        {/* text */}
+        <div>
+          <span className="text-sm font-bold uppercase tracking-widest text-green">Why FancyBoxMaker</span>
+          <h2 className="mt-3 font-display text-2xl font-extrabold leading-tight text-ink md:text-3xl">
+            Bespoke boxes that elevate your brand &amp; increase sales
+          </h2>
+          <p className="mt-4 max-w-xl leading-relaxed text-ink-soft">
+            Customers don&apos;t just buy products — they buy the{" "}
+            <span className="font-semibold text-brand">experience</span> your packaging creates. A custom box
+            protects your product in transit and promotes your brand on every doorstep, turning an ordinary
+            delivery into a moment worth sharing — and driving repeat orders.
+          </p>
 
-        <p className="mt-5 text-ink-soft leading-relaxed">
-          In today&apos;s crowded market, customers don&apos;t simply buy
-          products &mdash; they buy the{" "}
-          <span className="text-green font-semibold">experience</span> that
-          begins the very moment your packaging lands in their hands. Every
-          fold, print and finish tells a story about who you are, and a
-          thoughtfully designed box turns an ordinary delivery into a memorable
-          moment worth sharing.
-        </p>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+            {FEATURES.map((f) => (
+              <li key={f} className="flex items-start gap-2.5 text-sm font-medium text-ink">
+                <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-green text-white">
+                  <Check size={13} />
+                </span>
+                {f}
+              </li>
+            ))}
+          </ul>
 
-        <p className="mt-4 text-ink-soft leading-relaxed">
-          Whether you sell hot pizza on a Friday night or a piece of luxury
-          jewelry, custom boxes do two jobs at once: they{" "}
-          <span className="text-brand font-semibold">protect</span> your product
-          in transit and they{" "}
-          <span className="text-green font-semibold">promote</span> your brand on
-          every doorstep. That combination of durability and design is what
-          builds{" "}
-          <span className="text-brand font-semibold">loyalty</span>, drives
-          repeat orders and helps your business stand out from the competition.
-        </p>
-
-        <h3 className="font-display font-extrabold text-ink text-xl md:text-2xl mt-8">
-          Why Custom Packaging Is Essential for Your Business
-        </h3>
-
-        <p className="mt-4 text-ink-soft leading-relaxed">
-          Packaging is often the first physical touchpoint a customer has with
-          your company, and first impressions are hard to undo. Custom boxes let
-          you control that moment completely &mdash; shaping how people perceive
-          your quality, your values and your attention to detail before they
-          ever open the lid. In short, your packaging directly influences:
-        </p>
-
-        <ul className="list-disc pl-5 mt-4 text-ink-soft space-y-1.5">
-          <li>Your brand identity</li>
-          <li>Your brand&apos;s visual appeal</li>
-          <li>Your customer&apos;s first impression</li>
-        </ul>
-
-        <div className="mt-8">
           <Link
             href="/about"
-            className="inline-flex bg-brand text-white rounded-full px-6 py-2.5 text-sm font-semibold uppercase tracking-wide"
+            className="mt-8 inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-brand)] transition hover:bg-brand-dark"
           >
             Read More
           </Link>
+        </div>
+
+        {/* visual */}
+        <div className="relative">
+          <div className="rounded-3xl border border-line bg-gradient-to-br from-brand-soft to-white p-6 shadow-[var(--shadow-lift)] sm:p-8">
+            <div className="grid grid-cols-2 gap-4">
+              {TILES.map((t, i) => (
+                <div
+                  key={i}
+                  className={`aspect-square overflow-hidden rounded-2xl border border-line bg-white p-3 shadow-sm ${t.cls}`}
+                  style={{ rotate: t.rot }}
+                >
+                  <BoxMockup colorway={t.box} label={t.box.name} />
+                </div>
+              ))}
+            </div>
+          </div>
+          {/* floating badge */}
+          <div className="absolute -bottom-4 -left-4 flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3 shadow-lg">
+            <span className="text-2xl font-extrabold text-brand">4.9★</span>
+            <span className="text-xs leading-tight text-ink-soft">Trusted by<br />3,500+ brands</span>
+          </div>
         </div>
       </div>
     </section>
