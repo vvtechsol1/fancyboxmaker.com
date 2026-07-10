@@ -11,3 +11,6 @@ next-env.d.ts
 # Cloudflare build output
 .open-next
 .wrangler
+
+# Local Claude settings (may contain approved commands/secrets)
+.claude/settings.local.json
