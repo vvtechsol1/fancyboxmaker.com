@@ -1,87 +1,122 @@
 import Link from "next/link";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Package } from "lucide-react";
 import { COLORWAYS } from "@/data/products";
 import BoxMockup from "@/components/product/BoxMockup";
 
-const FEATURES = [
-  "Stronger brand identity",
-  "Premium visual appeal",
-  "Memorable first impression",
-  "Protects your product & promotes your brand",
+const POINTS = [
+  "Consistent, full-colour print quality",
+  "Fast turnaround — rush orders & short runs",
+  "Free custom design & realistic 3D mockups",
+  "Eco-friendly & food-safe packaging options",
+  "Low minimums — order from just 50 units",
 ];
 
-const CHIPS = ["Your logo", "Brand colours", "Premium finishes", "Any size"];
+const MARQUEE = [
+  "Fast Express Delivery",
+  "Custom Printed Packaging",
+  "Free 3D Mockup",
+  "Free Shipping Worldwide",
+  "No Minimums",
+];
+
+// Colourful box cluster used until a real product photo is dropped at
+// /public/images/bespoke.jpg (then swap this block for an <img>).
+const CLUSTER = [
+  { box: COLORWAYS.purple, cls: "col-start-2 row-start-1 w-40 xl:w-48", rot: "-6deg" },
+  { box: COLORWAYS.pink, cls: "col-start-1 row-start-2 w-36 xl:w-44", rot: "5deg" },
+  { box: COLORWAYS.teal, cls: "col-start-2 row-start-2 w-36 xl:w-44", rot: "-4deg" },
+  { box: COLORWAYS.gold, cls: "col-start-1 row-start-1 w-28 xl:w-32 self-end", rot: "6deg" },
+];
 
 export default function BespokeCopy() {
   return (
-    <section className="bg-white py-16">
-      <div className="container-x grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
-        {/* ── text ── */}
-        <div>
-          <span className="text-sm font-bold uppercase tracking-widest text-green">Why FancyBoxMaker</span>
-          <h2 className="mt-3 font-display text-2xl font-extrabold leading-tight text-ink md:text-3xl">
-            Bespoke boxes that elevate your brand &amp; increase sales
-          </h2>
-          <p className="mt-4 max-w-xl leading-relaxed text-ink-soft">
-            Customers don&apos;t just buy products — they buy the{" "}
-            <span className="font-semibold text-brand">experience</span> your packaging creates. A custom box
-            protects your product in transit and promotes your brand on every doorstep, turning an ordinary
-            delivery into a moment worth sharing — and driving repeat orders.
-          </p>
+    <section className="relative overflow-hidden">
+      {/* rotating circular badge, overlapping the top */}
+      <div className="absolute left-1/2 top-0 z-20 hidden -translate-x-1/2 -translate-y-1/2 lg:block">
+        <div className="relative h-24 w-24">
+          <div className="absolute inset-0 rounded-full bg-brand shadow-xl ring-4 ring-white" />
+          <div className="absolute inset-0" style={{ animation: "spin 18s linear infinite" }}>
+            <svg viewBox="0 0 100 100" className="h-full w-full">
+              <defs>
+                <path id="fbmBadge" d="M 50,50 m -36,0 a 36,36 0 1,1 72,0 a 36,36 0 1,1 -72,0" />
+              </defs>
+              <text fontSize="8.5" fontWeight="700" fill="#ffffff" letterSpacing="1.5">
+                <textPath href="#fbmBadge">FREE 3D MOCKUP · FANCYBOXMAKER · </textPath>
+              </text>
+            </svg>
+          </div>
+          <div className="absolute inset-0 grid place-items-center text-white">
+            <Package size={22} />
+          </div>
+        </div>
+      </div>
 
-          <ul className="mt-6 grid gap-3 sm:grid-cols-2">
-            {FEATURES.map((f) => (
-              <li key={f} className="flex items-start gap-2.5 text-sm font-medium text-ink">
-                <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-green text-white">
-                  <Check size={13} />
-                </span>
-                {f}
-              </li>
-            ))}
-          </ul>
+      <div className="grid lg:grid-cols-2">
+        {/* ── left: dark panel with minimal content ── */}
+        <div
+          className="relative px-6 py-16 text-white sm:px-10 lg:py-24"
+          style={{
+            background:
+              "radial-gradient(120% 100% at 0% 100%, rgba(24,188,170,0.28), transparent 55%), linear-gradient(135deg, #0f1c36 0%, #241147 60%, #0b0620 100%)",
+          }}
+        >
+          <div className="mx-auto max-w-xl lg:ml-auto lg:mr-0 lg:pr-12">
+            <span className="text-xs font-bold uppercase tracking-[0.3em] text-pink-400">
+              Your brand · our packaging
+            </span>
+            <h2 className="mt-5 font-serif text-3xl leading-tight md:text-4xl xl:text-5xl">
+              Start your brand from here — here&apos;s what you get:
+            </h2>
 
-          <Link
-            href="/about"
-            className="mt-8 inline-flex rounded-full bg-brand px-6 py-3 text-sm font-semibold uppercase tracking-wide text-white shadow-[var(--shadow-brand)] transition hover:bg-brand-dark"
-          >
-            Read More
-          </Link>
+            <ul className="mt-8 space-y-4">
+              {POINTS.map((p) => (
+                <li key={p} className="flex items-start gap-3 text-white/85">
+                  <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-pink-500/20 text-pink-400">
+                    <Check size={14} />
+                  </span>
+                  <span className="text-sm md:text-base">{p}</span>
+                </li>
+              ))}
+            </ul>
+
+            <Link
+              href="/quote"
+              className="mt-9 inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold uppercase tracking-wide text-[#0b0620] shadow-lg transition hover:bg-white/90"
+            >
+              Get a Free Quote
+            </Link>
+          </div>
         </div>
 
-        {/* ── designed visual ── */}
-        <div className="relative">
-          {/* decorative glow */}
-          <div className="pointer-events-none absolute -right-6 -top-8 h-44 w-44 rounded-full bg-brand/25 blur-3xl" />
-          <div className="pointer-events-none absolute -bottom-10 -left-6 h-44 w-44 rounded-full bg-green/20 blur-3xl" />
-
-          <div className="relative overflow-hidden rounded-[2rem] border border-line bg-gradient-to-br from-brand-soft via-white to-cream p-6 shadow-[var(--shadow-lift)] sm:p-8">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="aspect-square rounded-2xl border border-line bg-white p-3 shadow-sm" style={{ rotate: "-5deg" }}>
-                <BoxMockup colorway={COLORWAYS.teal} label="Custom box" />
-              </div>
-              <div className="mt-6 aspect-square rounded-2xl border border-line bg-white p-3 shadow-sm" style={{ rotate: "5deg" }}>
-                <BoxMockup colorway={COLORWAYS.navy} label="Custom box" />
-              </div>
-            </div>
-
-            {/* related feature tags */}
-            <div className="mt-6 flex flex-wrap gap-2">
-              {CHIPS.map((c) => (
-                <span key={c} className="inline-flex items-center gap-1.5 rounded-full border border-line bg-white px-3 py-1.5 text-xs font-semibold text-ink shadow-sm">
-                  <Check size={12} className="text-green" /> {c}
-                </span>
+        {/* ── right: visual (swap for /images/bespoke.jpg when ready) ── */}
+        <div className="relative min-h-[380px] overflow-hidden bg-gradient-to-br from-[#eef1f4] to-[#d7dce2] lg:min-h-full">
+          {/* soft glow accents */}
+          <div className="pointer-events-none absolute -left-10 top-10 h-48 w-48 rounded-full bg-brand/20 blur-3xl" />
+          <div className="pointer-events-none absolute bottom-6 right-6 h-40 w-40 rounded-full bg-pink-400/20 blur-3xl" />
+          <div className="absolute inset-0 grid place-items-center p-8">
+            <div className="grid grid-cols-2 items-center gap-4">
+              {CLUSTER.map((t, i) => (
+                <div
+                  key={i}
+                  className={`overflow-hidden rounded-3xl bg-white/70 p-3 shadow-2xl ring-1 ring-black/5 backdrop-blur ${t.cls}`}
+                  style={{ rotate: t.rot }}
+                >
+                  <BoxMockup colorway={t.box} label={t.box.name} />
+                </div>
               ))}
             </div>
           </div>
+        </div>
+      </div>
 
-          {/* floating badges */}
-          <div className="absolute -top-4 right-5 flex items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-sm font-bold text-white shadow-lg">
-            <Sparkles size={15} /> Free 3D Mockup
-          </div>
-          <div className="absolute -bottom-5 left-2 flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3 shadow-lg">
-            <span className="text-2xl font-extrabold text-brand">4.9★</span>
-            <span className="text-xs leading-tight text-ink-soft">Trusted by<br />3,500+ brands</span>
-          </div>
+      {/* ── bottom marquee strip ── */}
+      <div className="overflow-hidden bg-brand py-3.5 text-white">
+        <div className="flex w-max animate-marquee items-center gap-6 whitespace-nowrap text-sm font-bold uppercase tracking-wide">
+          {[...MARQUEE, ...MARQUEE, ...MARQUEE].map((it, i) => (
+            <span key={i} className="flex items-center gap-6">
+              <Sparkles size={14} className="text-white/70" /> {it}
+            </span>
+          ))}
         </div>
       </div>
     </section>
