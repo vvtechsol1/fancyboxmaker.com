@@ -4,7 +4,7 @@
  */
 const STATS: { value: string; label: string; bg: string }[] = [
   { value: "12K+", label: "Orders Done", bg: "bg-brand" },
-  { value: "98%", label: "Positive Rating", bg: "bg-green" },
+  { value: "98%", label: "Positive Rating", bg: "bg-brand" },
   { value: "3.5K+", label: "Trusted Clients", bg: "bg-brand" },
   { value: "4.9★", label: "Trustpilot Rating", bg: "bg-brand" },
 ];
