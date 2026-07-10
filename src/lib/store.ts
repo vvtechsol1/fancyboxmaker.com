@@ -22,13 +22,15 @@ let _cache: Product[] | null = null;
 
 export async function getAllProducts(): Promise<Product[]> {
   if (_cache) return _cache;
-  await ensureFile();
-  const raw = await fs.readFile(FILE, "utf8");
   try {
+    await ensureFile();
+    const raw = await fs.readFile(FILE, "utf8");
     const list = JSON.parse(raw) as Product[];
     _cache = Array.isArray(list) ? list : [];
   } catch {
-    _cache = [];
+    // No writable/readable filesystem (e.g. Cloudflare Workers) → use the
+    // bundled seed catalogue so product browsing still works on the edge.
+    _cache = seedProducts;
   }
   return _cache;
 }
