@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Plus, Pencil, Trash2, LogOut, ExternalLink, Loader2, Package, BarChart3, ShoppingBag, FileText } from "lucide-react";
+import { Plus, Pencil, Trash2, LogOut, ExternalLink, Loader2, Package, BarChart3, ShoppingBag, FileText, Palette } from "lucide-react";
 import type { Product } from "@/data/products";
 import { formatPrice } from "@/lib/site";
 import BoxMockup from "@/components/product/BoxMockup";
@@ -11,8 +11,9 @@ import AdminProductForm from "./AdminProductForm";
 import StatsPanel from "./StatsPanel";
 import OrdersPanel from "./OrdersPanel";
 import QuotesPanel from "./QuotesPanel";
+import CustomizePanel from "./CustomizePanel";
 
-type View = "list" | "form" | "stats" | "orders" | "quotes";
+type View = "list" | "form" | "stats" | "orders" | "quotes" | "customize";
 
 export default function AdminApp() {
   const [products, setProducts] = useState<Product[] | null>(null);
@@ -67,6 +68,7 @@ export default function AdminApp() {
             ["list", "Products", Package],
             ["orders", "Orders", ShoppingBag],
             ["quotes", "Quotes", FileText],
+            ["customize", "Customize", Palette],
             ["stats", "Stats", BarChart3],
           ] as const).map(([v, lbl, Icon]) => (
             <button
@@ -81,7 +83,9 @@ export default function AdminApp() {
         </div>
       )}
 
-      {view === "stats" ? (
+      {view === "customize" ? (
+        <CustomizePanel />
+      ) : view === "stats" ? (
         <StatsPanel />
       ) : view === "orders" ? (
         <OrdersPanel />

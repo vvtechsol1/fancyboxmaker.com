@@ -9,45 +9,47 @@ import {
 } from "lucide-react";
 import { categories } from "@/data/taxonomy";
 import { useCart } from "@/lib/cart";
-import { SITE, announcements } from "@/lib/site";
 import { COLORWAYS } from "@/data/products";
+import type { SiteSettings } from "@/lib/settings";
 import BoxMockup from "@/components/product/BoxMockup";
 import SearchBar from "./SearchBar";
-
-const NAV_LINKS = [
-  { label: "Shop All", href: "/shop" },
-  { label: "Get a Quote", href: "/quote" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
-];
 
 const FEATURED = [
   { name: "Mailer Boxes", href: "/category/mailer-boxes", box: COLORWAYS.teal, tag: "Best seller" },
   { name: "Rigid Boxes", href: "/category/rigid-boxes", box: COLORWAYS.navy, tag: "Trending" },
 ];
 
-function Logo() {
+function Logo({ settings }: { settings: SiteSettings }) {
   return (
-    <Link href="/" className="flex shrink-0 items-center gap-2" aria-label="FancyBoxMaker home">
-      <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-white shadow-[var(--shadow-brand)]">
-        <ShoppingCart size={18} />
-      </span>
-      <span className="font-display text-lg font-extrabold tracking-tight text-ink md:text-xl">
-        FancyBox<span className="text-brand">Maker</span>
-      </span>
+    <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={`${settings.brandName} home`}>
+      {settings.logoImage ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={settings.logoImage} alt={settings.brandName} className="h-9 w-auto max-w-[190px] object-contain" />
+      ) : (
+        <>
+          <span className="grid h-9 w-9 place-items-center rounded-lg bg-brand text-white shadow-[var(--shadow-brand)]">
+            <ShoppingCart size={18} />
+          </span>
+          <span className="font-display text-lg font-extrabold tracking-tight text-ink md:text-xl">
+            {settings.logoText1}<span className="text-brand">{settings.logoText2}</span>
+          </span>
+        </>
+      )}
     </Link>
   );
 }
 
 /** Thin promo + contact strip at the very top. */
-function TopBar() {
+function TopBar({ settings }: { settings: SiteSettings }) {
+  const items = settings.announcements.length ? settings.announcements : [""];
   const [idx, setIdx] = useState(0);
   useEffect(() => {
-    const id = setInterval(() => setIdx((v) => (v + 1) % announcements.length), 3500);
+    const id = setInterval(() => setIdx((v) => (v + 1) % items.length), 3500);
     return () => clearInterval(id);
-  }, []);
+  }, [items.length]);
+  if (!settings.topbarEnabled) return null;
   return (
-    <div className="text-white" style={{ background: "#18bcaa" }}>
+    <div className="text-white" style={{ background: settings.colorPrimary }}>
       <div className="container-x flex h-9 items-center justify-between text-xs">
         {/* promo (rotating) */}
         <div className="flex items-center gap-2 overflow-hidden">
@@ -61,17 +63,17 @@ function TopBar() {
               transition={{ duration: 0.3 }}
               className="truncate font-medium"
             >
-              {announcements[idx]}
+              {items[idx % items.length]}
             </motion.span>
           </AnimatePresence>
         </div>
         {/* contact */}
         <div className="hidden items-center gap-5 sm:flex">
-          <a href={`tel:${SITE.phoneDisplay.replace(/[^0-9+]/g, "")}`} className="flex items-center gap-1.5 transition hover:text-white/70">
-            <Phone size={13} /> {SITE.phoneDisplay}
+          <a href={`tel:${settings.phone.replace(/[^0-9+]/g, "")}`} className="flex items-center gap-1.5 transition hover:text-white/70">
+            <Phone size={13} /> {settings.phone}
           </a>
-          <a href={`mailto:${SITE.email}`} className="hidden items-center gap-1.5 transition hover:text-white/70 md:flex">
-            <Mail size={13} /> {SITE.email}
+          <a href={`mailto:${settings.email}`} className="hidden items-center gap-1.5 transition hover:text-white/70 md:flex">
+            <Mail size={13} /> {settings.email}
           </a>
         </div>
       </div>
@@ -103,7 +105,7 @@ function IconLink({
   );
 }
 
-export default function Header() {
+export default function Header({ settings }: { settings: SiteSettings }) {
   const { count, openCart } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -137,11 +139,8 @@ export default function Header() {
   const scheduleClose = () => { closeTimer.current = setTimeout(() => setMegaOpen(false), 120); };
 
   return (
-    <header
-      style={{ "--color-brand": "#18bcaa", "--color-brand-dark": "#0e9c8c", "--color-brand-soft": "#d3f4ef" } as React.CSSProperties}
-      className={`sticky top-0 z-40 bg-cream ${scrolled ? "shadow-[var(--shadow-soft)]" : "border-b border-line"}`}
-    >
-      <TopBar />
+    <header className={`sticky top-0 z-40 bg-cream ${scrolled ? "shadow-[var(--shadow-soft)]" : "border-b border-line"}`}>
+      <TopBar settings={settings} />
 
       {/* Main nav bar + mega menu live together so hover/leave is seamless */}
       <div className="relative" onMouseLeave={scheduleClose}>
@@ -180,13 +179,13 @@ export default function Header() {
 
             {/* CENTER: logo */}
             <div className="flex justify-center">
-              <Logo />
+              <Logo settings={settings} />
             </div>
 
             {/* RIGHT: nav links + icons */}
             <div className="flex items-center justify-end gap-1">
               <nav className="mr-1 hidden items-center gap-1 xl:flex" onMouseEnter={scheduleClose}>
-                {NAV_LINKS.map((l) => (
+                {settings.navLinks.map((l) => (
                   <Link key={l.href} href={l.href} className="rounded-lg px-3 py-2.5 text-sm font-bold text-ink transition hover:text-brand">
                     {l.label}
                   </Link>
@@ -330,13 +329,13 @@ export default function Header() {
 
       {/* Mobile drawer */}
       <AnimatePresence>
-        {mobileOpen && <MobileDrawer onClose={() => setMobileOpen(false)} />}
+        {mobileOpen && <MobileDrawer onClose={() => setMobileOpen(false)} settings={settings} />}
       </AnimatePresence>
     </header>
   );
 }
 
-function MobileDrawer({ onClose }: { onClose: () => void }) {
+function MobileDrawer({ onClose, settings }: { onClose: () => void; settings: SiteSettings }) {
   const [openCat, setOpenCat] = useState<string | null>(null);
   return (
     <>
@@ -351,7 +350,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
       >
         <div className="flex items-center justify-between border-b border-line px-4 py-3">
           <span className="font-display text-lg font-extrabold tracking-tight text-ink">
-            FancyBox<span className="text-brand">Maker</span>
+            {settings.logoText1}<span className="text-brand">{settings.logoText2}</span>
           </span>
           <button type="button" onClick={onClose} aria-label="Close menu" className="grid h-9 w-9 place-items-center rounded-lg hover:bg-surface">
             <X size={22} />
@@ -397,7 +396,7 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           ))}
 
           <div className="mt-3">
-            {NAV_LINKS.map((l) => (
+            {settings.navLinks.map((l) => (
               <Link key={l.href} href={l.href} onClick={onClose} className="block px-3 py-3 text-sm font-semibold text-ink">
                 {l.label}
               </Link>

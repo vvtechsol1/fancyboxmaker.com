@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Phone, Mail, MapPin, ShoppingCart } from "lucide-react";
-import { SITE } from "@/lib/site";
+import type { SiteSettings } from "@/lib/settings";
 
 function IgIcon({ size = 17 }: { size?: number }) {
   return (
@@ -52,24 +52,30 @@ const INFO = [
 
 const PAYMENTS = ["VISA", "Mastercard", "PayPal", "Amex", "Discover"];
 
-export default function Footer() {
-  const year = 2026;
+export default function Footer({ settings }: { settings: SiteSettings }) {
+  const year = new Date().getFullYear();
   return (
-    <footer className="mt-20 text-white/85" style={{ background: "#18bcaa" }}>
+    <footer className="mt-20 text-white/85" style={{ background: settings.colorPrimary }}>
       <div className="container-x grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
         {/* brand */}
         <div className="lg:col-span-1">
           <Link href="/" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-lg bg-white text-[#18bcaa]">
-              <ShoppingCart size={18} />
-            </span>
-            <span className="font-display text-lg font-extrabold tracking-tight text-white">
-              FancyBox<span className="text-white">Maker</span>
-            </span>
+            {settings.logoImage ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={settings.logoImage} alt={settings.brandName} className="h-9 w-auto max-w-[190px] object-contain" />
+            ) : (
+              <>
+                <span className="grid h-9 w-9 place-items-center rounded-lg bg-white text-brand">
+                  <ShoppingCart size={18} />
+                </span>
+                <span className="font-display text-lg font-extrabold tracking-tight text-white">
+                  {settings.logoText1}<span className="text-white/70">{settings.logoText2}</span>
+                </span>
+              </>
+            )}
           </Link>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/55">
-            FancyBoxMaker is a trusted provider of premium custom printed packaging — crafting and shipping
-            bespoke boxes in bulk for brands across the USA and worldwide.
+            {settings.footerDescription}
           </p>
         </div>
 
@@ -104,22 +110,22 @@ export default function Footer() {
           <h4 className="mb-4 text-sm font-bold uppercase tracking-wide text-white">Need Help?</h4>
           <ul className="space-y-3 text-sm">
             <li>
-              <a href={`tel:${SITE.phoneDisplay.replace(/[^0-9+]/g, "")}`} className="flex items-center gap-2 transition hover:text-white">
-                <Phone size={15} className="text-white" /> {SITE.phoneDisplay}
+              <a href={`tel:${settings.phone.replace(/[^0-9+]/g, "")}`} className="flex items-center gap-2 transition hover:text-white">
+                <Phone size={15} className="text-white" /> {settings.phone}
               </a>
             </li>
             <li>
-              <a href={`mailto:${SITE.email}`} className="flex items-center gap-2 transition hover:text-white">
-                <Mail size={15} className="text-white" /> {SITE.email}
+              <a href={`mailto:${settings.email}`} className="flex items-center gap-2 transition hover:text-white">
+                <Mail size={15} className="text-white" /> {settings.email}
               </a>
             </li>
             <li className="flex items-start gap-2">
-              <MapPin size={15} className="mt-0.5 text-white" /> <span>Billings, Montana, USA<br />Serving brands worldwide</span>
+              <MapPin size={15} className="mt-0.5 text-white" /> <span>{settings.address}</span>
             </li>
           </ul>
           <div className="mt-4 flex gap-2">
             {[IgIcon, FbIcon, XIcon].map((Icon, i) => (
-              <a key={i} href={[SITE.instagram, SITE.facebook, SITE.tiktok][i]} target="_blank" rel="noopener noreferrer"
+              <a key={i} href={[settings.instagram, settings.facebook, settings.twitter][i]} target="_blank" rel="noopener noreferrer"
                 aria-label={["Instagram", "Facebook", "X"][i]}
                 className="grid h-9 w-9 place-items-center rounded-full border border-white/20 text-white/80 transition hover:border-green hover:text-white">
                 <Icon size={16} />
@@ -131,7 +137,7 @@ export default function Footer() {
 
       <div className="border-t border-white/20 bg-ink">
         <div className="container-x flex flex-col items-center justify-between gap-3 py-5 text-xs text-white/55 sm:flex-row">
-          <p>© {year} — All Rights Reserved by FancyBoxMaker.com</p>
+          <p>{settings.footerCopyright.replace("{year}", String(year))}</p>
           <div className="flex items-center gap-2">
             {PAYMENTS.map((p) => (
               <span key={p} className="rounded bg-white/10 px-2 py-1 text-[10px] font-semibold text-white/80">{p}</span>

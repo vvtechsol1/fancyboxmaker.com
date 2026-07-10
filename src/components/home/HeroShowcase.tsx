@@ -5,12 +5,10 @@ import Link from "next/link";
 import { gsap } from "gsap";
 import { useGSAP } from "@gsap/react";
 import { COLORWAYS } from "@/data/products";
+import type { SiteSettings } from "@/lib/settings";
 import BoxMockup from "@/components/product/BoxMockup";
 
 gsap.registerPlugin(useGSAP);
-
-/** Words the H1 types / selects / deletes, on a loop. */
-const WORDS = ["Retail Packaging", "Luxury Packaging"];
 
 /** Colorful product tiles scattered around the edges (floating). */
 const TILES = [
@@ -34,9 +32,10 @@ const PILLS = [
   { label: "Gift Boxes", href: "/category/gift-boxes", bg: "#f87171", fg: "#450a0a" },
 ];
 
-export default function HeroShowcase() {
+export default function HeroShowcase({ settings }: { settings: SiteSettings }) {
   const root = useRef<HTMLElement>(null);
   const typeRef = useRef<HTMLSpanElement>(null);
+  const WORDS = settings.heroWords.length ? settings.heroWords : ["Custom Boxes"];
 
   useGSAP(
     () => {
@@ -101,8 +100,7 @@ export default function HeroShowcase() {
       data-no-reveal
       className="relative overflow-hidden rounded-b-[40px]"
       style={{
-        background:
-          "radial-gradient(at 18% 20%, #7c3aed 0px, transparent 55%), radial-gradient(at 82% 12%, #18bcaa 0px, transparent 50%), radial-gradient(at 78% 88%, #db2777 0px, transparent 52%), radial-gradient(at 12% 82%, #6d28d9 0px, transparent 50%), linear-gradient(160deg, #1e1147 0%, #140a2e 100%)",
+        background: `radial-gradient(at 18% 20%, #7c3aed 0px, transparent 55%), radial-gradient(at 82% 12%, ${settings.colorPrimary} 0px, transparent 50%), radial-gradient(at 78% 88%, #db2777 0px, transparent 52%), radial-gradient(at 12% 82%, #6d28d9 0px, transparent 50%), linear-gradient(160deg, #1e1147 0%, #140a2e 100%)`,
       }}
     >
       {/* soft top glow */}
@@ -129,11 +127,11 @@ export default function HeroShowcase() {
       {/* centred content */}
       <div className="relative z-10 mx-auto flex max-w-3xl flex-col items-center px-6 py-20 text-center md:py-28">
         <span className="hero-eyebrow text-sm font-bold uppercase tracking-[0.3em] text-pink-400">
-          #1 Printing Services NYC
+          {settings.heroEyebrow}
         </span>
 
         <h1 className="hero-h1 mt-6 w-full font-serif text-4xl leading-tight text-white sm:text-5xl md:text-6xl">
-          <span className="block">Find your best solution</span>
+          <span className="block">{settings.heroHeadingPrefix}</span>
           <span className="mt-1 block min-h-[1.2em] font-semibold">
             <span ref={typeRef} className="hero-type" />
             <span className="hero-caret">|</span>
@@ -141,22 +139,22 @@ export default function HeroShowcase() {
         </h1>
 
         <p className="hero-sub mx-auto mt-6 max-w-2xl text-lg text-white/70">
-          Packaging is the first impression your brand makes on a customer.
+          {settings.heroSubtitle}
         </p>
 
         {/* CTAs */}
         <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
           <Link
-            href="/quote"
+            href={settings.heroCtaPrimaryHref}
             className="hero-cta rounded-full bg-white px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-[#1a0f3d] shadow-lg transition hover:bg-white/90 active:scale-[.98]"
           >
-            Get Free Quote
+            {settings.heroCtaPrimaryLabel}
           </Link>
           <Link
-            href="/shop"
+            href={settings.heroCtaSecondaryHref}
             className="hero-cta rounded-full border border-white/40 px-7 py-3.5 text-sm font-bold uppercase tracking-wide text-white transition hover:bg-white/10 active:scale-[.98]"
           >
-            Explore Boxes
+            {settings.heroCtaSecondaryLabel}
           </Link>
         </div>
 

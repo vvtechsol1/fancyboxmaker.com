@@ -129,7 +129,7 @@ export default function GetInTouch() {
             <ul className="mt-8 space-y-6">
               {PROCESS.map(({ icon: Icon, title, text }) => (
                 <li key={title} className="flex items-start gap-4">
-                  <span className="grid h-12 w-12 place-items-center rounded-full border-2 border-[#18bcaa] text-[#18bcaa] shrink-0">
+                  <span className="grid h-12 w-12 place-items-center rounded-full border-2 border-brand text-brand shrink-0">
                     <Icon size={22} />
                   </span>
                   <div>
@@ -143,13 +143,13 @@ export default function GetInTouch() {
 
           {/* RIGHT — form card */}
           <div className="rounded-2xl overflow-hidden border border-line bg-white shadow-soft">
-            <div className="py-4 text-center text-xl font-bold text-white" style={{ background: "#18bcaa" }}>
+            <div className="py-4 text-center text-xl font-bold text-white" style={{ background: "var(--color-brand)" }}>
               Get a Free Quote
             </div>
 
             {status === "done" ? (
               <div className="flex flex-col items-center justify-center gap-3 p-10 text-center">
-                <CheckCircle2 size={56} className="text-[#18bcaa]" />
+                <CheckCircle2 size={56} className="text-brand" />
                 <p className="text-lg font-bold text-ink">
                   Quote request received!
                 </p>
@@ -276,7 +276,7 @@ export default function GetInTouch() {
                   type="submit"
                   disabled={status === "sending"}
                   className="w-full rounded-full py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:brightness-95 disabled:opacity-60"
-                  style={{ background: "#18bcaa" }}
+                  style={{ background: "var(--color-brand)" }}
                 >
                   {status === "sending" ? "Sending…" : "Request a Quote"}
                 </button>
