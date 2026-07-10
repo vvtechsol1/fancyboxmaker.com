@@ -1,12 +1,11 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { Plus, Trash2, Upload, X, Loader2 } from "lucide-react";
-import { categories } from "@/data/taxonomy";
+import { categories, type BoxCategory } from "@/data/taxonomy";
 import { COLORWAYS, type Product, type Variant, type Spec, type Colorway } from "@/data/products";
 
-const CATS = categories;
 const COLOR_KEYS = Object.keys(COLORWAYS);
 
 const slugify = (s: string) =>
@@ -20,12 +19,19 @@ type Props = {
 
 export default function AdminProductForm({ initial, onSaved, onCancel }: Props) {
   const editing = !!initial;
+  const [cats, setCats] = useState<BoxCategory[]>(categories);
+  useEffect(() => {
+    fetch("/api/admin/taxonomy")
+      .then((r) => r.json() as Promise<{ ok: boolean; categories?: BoxCategory[] }>)
+      .then((d) => { if (d.ok && d.categories?.length) setCats(d.categories); })
+      .catch(() => {});
+  }, []);
   const [name, setName] = useState(initial?.name ?? "");
   const [slug, setSlug] = useState(initial?.slug ?? "");
   const [slugTouched, setSlugTouched] = useState(editing);
   const [type, setType] = useState(initial?.type ?? "Corrugated Mailer");
-  const [category, setCategory] = useState(initial?.category ?? CATS[0].slug);
-  const [boxType, setBoxType] = useState(initial?.boxType ?? CATS[0].types[0].slug);
+  const [category, setCategory] = useState(initial?.category ?? categories[0].slug);
+  const [boxType, setBoxType] = useState(initial?.boxType ?? categories[0].types[0].slug);
   const [price, setPrice] = useState(String(initial?.price ?? ""));
   const [oldPrice, setOldPrice] = useState(initial?.oldPrice ? String(initial.oldPrice) : "");
   const [taxPercent, setTaxPercent] = useState(initial?.taxPercent ? String(initial.taxPercent) : "");
@@ -53,7 +59,7 @@ export default function AdminProductForm({ initial, onSaved, onCancel }: Props) 
   const [error, setError] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
-  const typeOptions = useMemo(() => CATS.find((c) => c.slug === category)?.types ?? [], [category]);
+  const typeOptions = useMemo(() => cats.find((c) => c.slug === category)?.types ?? [], [category, cats]);
   const effSlug = slugTouched ? slug : slugify(name || "");
 
   async function uploadFiles(files: FileList) {
@@ -73,7 +79,7 @@ export default function AdminProductForm({ initial, onSaved, onCancel }: Props) 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    const c = CATS.find((x) => x.slug === category);
+    const c = cats.find((x) => x.slug === category);
     const bt = typeOptions.find((x) => x.slug === boxType) ?? typeOptions[0];
     if (!name || !price || !c || !bt) {
       setError("Please fill name, price, category and box type.");
@@ -148,8 +154,8 @@ export default function AdminProductForm({ initial, onSaved, onCancel }: Props) 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
             <label className={label}>Category *</label>
-            <select value={category} onChange={(e) => { setCategory(e.target.value); const c = CATS.find((x) => x.slug === e.target.value); if (c) setBoxType(c.types[0].slug); }} className={field}>
-              {CATS.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
+            <select value={category} onChange={(e) => { setCategory(e.target.value); const c = cats.find((x) => x.slug === e.target.value); if (c) setBoxType(c.types[0].slug); }} className={field}>
+              {cats.map((c) => <option key={c.slug} value={c.slug}>{c.name}</option>)}
             </select>
           </div>
           <div>

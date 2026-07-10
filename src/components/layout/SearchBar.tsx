@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, Layers, Tag, Package } from "lucide-react";
-import { categories } from "@/data/taxonomy";
+import type { BoxCategory } from "@/data/taxonomy";
 import { track } from "@/lib/track";
 
 type Item = { label: string; sub: string; href: string; kind: "boxtype" | "category" | "product" };
 
-function taxonomyIndex(): Item[] {
+function taxonomyIndex(categories: BoxCategory[]): Item[] {
   const items: Item[] = [];
   for (const c of categories) {
     items.push({ label: c.name, sub: "Category", href: `/collection/${c.slug}`, kind: "category" });
@@ -23,10 +23,12 @@ export default function SearchBar({
   className = "",
   autoFocus = false,
   onSubmitted,
+  categories,
 }: {
   className?: string;
   autoFocus?: boolean;
   onSubmitted?: () => void;
+  categories: BoxCategory[];
 }) {
   const router = useRouter();
   const [prod, setProd] = useState<{ name: string; slug: string }[]>([]);
@@ -44,10 +46,10 @@ export default function SearchBar({
   }, [autoFocus]);
 
   const index = useMemo<Item[]>(() => {
-    const base = taxonomyIndex();
+    const base = taxonomyIndex(categories);
     const products: Item[] = prod.map((p) => ({ label: p.name, sub: "Product", href: `/product/${p.slug}`, kind: "product" }));
     return [...products, ...base];
-  }, [prod]);
+  }, [prod, categories]);
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

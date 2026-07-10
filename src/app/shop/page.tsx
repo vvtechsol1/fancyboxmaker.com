@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllProducts } from "@/lib/store";
-import { categories } from "@/data/taxonomy";
+import { getCategories } from "@/lib/taxonomy-store";
 import ProductCard from "@/components/product/ProductCard";
 
 export const dynamic = "force-dynamic";
@@ -21,6 +21,7 @@ export default async function ShopPage({
   const { q, category } = await searchParams;
   const query = (q || "").trim().toLowerCase();
 
+  const categories = await getCategories();
   let items = await getAllProducts();
   if (category) items = items.filter((p) => p.category === category);
   if (query)

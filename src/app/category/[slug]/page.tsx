@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { getBoxTypeBySlug, getCategoryOfType } from "@/data/taxonomy";
+import { getBoxTypeBySlugLive, getCategoryOfTypeLive } from "@/lib/taxonomy-store";
 import { getProductsByBoxType } from "@/lib/store";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const boxType = getBoxTypeBySlug(slug);
+  const boxType = await getBoxTypeBySlugLive(slug);
   if (!boxType) return { title: "Not found" };
   return {
     title: `Custom ${boxType.name} — Printed & Wholesale`,
@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function BoxTypePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const boxType = getBoxTypeBySlug(slug);
-  const category = getCategoryOfType(slug);
+  const boxType = await getBoxTypeBySlugLive(slug);
+  const category = await getCategoryOfTypeLive(slug);
   if (!boxType || !category) notFound();
 
   const items = await getProductsByBoxType(slug);

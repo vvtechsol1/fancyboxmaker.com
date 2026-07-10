@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { getCategoryBySlug } from "@/data/taxonomy";
+import { getCategoryBySlugLive } from "@/lib/taxonomy-store";
 import { getProductsByCategory } from "@/lib/store";
 import ProductCard from "@/components/product/ProductCard";
 
@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const c = getCategoryBySlug(slug);
+  const c = await getCategoryBySlugLive(slug);
   if (!c) return { title: "Not found" };
   return {
     title: `${c.name} — Custom Printed Packaging`,
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function CollectionPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const category = getCategoryBySlug(slug);
+  const category = await getCategoryBySlugLive(slug);
   if (!category) notFound();
 
   const items = await getProductsByCategory(slug);

@@ -3,6 +3,7 @@ import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { getSettings } from "@/lib/settings";
+import { getCategories } from "@/lib/taxonomy-store";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileTabBar from "@/components/layout/MobileTabBar";
@@ -48,7 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const s = await getSettings();
+  const [s, cats] = await Promise.all([getSettings(), getCategories()]);
   // Runtime theme — overrides the globals.css @theme defaults from admin settings.
   const themeVars = `:root{--color-brand:${s.colorPrimary};--color-brand-dark:${s.colorPrimaryDark};--color-brand-soft:color-mix(in srgb, ${s.colorPrimary} 14%, white);--color-green:${s.colorSecondary};--color-cream:${s.colorBg};--color-ink:${s.colorInk};}`;
 
@@ -60,7 +61,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Tracker />
           <Presence />
           <ScrollAnimations />
-          <ChromeGate><Header settings={s} /></ChromeGate>
+          <ChromeGate><Header settings={s} categories={cats} /></ChromeGate>
           <main className="flex-1">{children}</main>
           <ChromeGate>
             <Footer settings={s} />

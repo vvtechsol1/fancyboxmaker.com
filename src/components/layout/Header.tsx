@@ -7,7 +7,7 @@ import {
   Menu, X, ShoppingCart, ChevronDown, ChevronRight, Search, Heart, User,
   Phone, Mail, FileText, Sparkles,
 } from "lucide-react";
-import { categories } from "@/data/taxonomy";
+import type { BoxCategory } from "@/data/taxonomy";
 import { useCart } from "@/lib/cart";
 import { COLORWAYS } from "@/data/products";
 import type { SiteSettings } from "@/lib/settings";
@@ -105,7 +105,7 @@ function IconLink({
   );
 }
 
-export default function Header({ settings }: { settings: SiteSettings }) {
+export default function Header({ settings, categories }: { settings: SiteSettings; categories: BoxCategory[] }) {
   const { count, openCart } = useCart();
   const [scrolled, setScrolled] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -221,7 +221,7 @@ export default function Header({ settings }: { settings: SiteSettings }) {
               className="overflow-hidden border-t border-line bg-cream"
             >
               <div className="container-x py-3">
-                <SearchBar autoFocus onSubmitted={() => setSearchOpen(false)} />
+                <SearchBar autoFocus categories={categories} onSubmitted={() => setSearchOpen(false)} />
               </div>
             </motion.div>
           )}
@@ -329,13 +329,13 @@ export default function Header({ settings }: { settings: SiteSettings }) {
 
       {/* Mobile drawer */}
       <AnimatePresence>
-        {mobileOpen && <MobileDrawer onClose={() => setMobileOpen(false)} settings={settings} />}
+        {mobileOpen && <MobileDrawer onClose={() => setMobileOpen(false)} settings={settings} categories={categories} />}
       </AnimatePresence>
     </header>
   );
 }
 
-function MobileDrawer({ onClose, settings }: { onClose: () => void; settings: SiteSettings }) {
+function MobileDrawer({ onClose, settings, categories }: { onClose: () => void; settings: SiteSettings; categories: BoxCategory[] }) {
   const [openCat, setOpenCat] = useState<string | null>(null);
   return (
     <>
@@ -358,7 +358,7 @@ function MobileDrawer({ onClose, settings }: { onClose: () => void; settings: Si
         </div>
 
         <div className="border-b border-line px-4 py-3">
-          <SearchBar onSubmitted={onClose} />
+          <SearchBar categories={categories} onSubmitted={onClose} />
         </div>
 
         <div className="flex-1 overflow-y-auto px-2 py-3">

@@ -15,8 +15,9 @@ import StatsPanel from "./StatsPanel";
 import OrdersPanel from "./OrdersPanel";
 import QuotesPanel from "./QuotesPanel";
 import CustomizePanel from "./CustomizePanel";
+import CategoriesPanel from "./CategoriesPanel";
 
-type View = "list" | "form" | "stats" | "orders" | "quotes" | "customize";
+type View = "list" | "form" | "stats" | "orders" | "quotes" | "customize" | "categories";
 
 const NAV = [
   { key: "list", label: "Products", icon: Package },
@@ -24,6 +25,11 @@ const NAV = [
   { key: "quotes", label: "Quotes", icon: FileText },
   { key: "customize", label: "Customize", icon: Palette },
   { key: "stats", label: "Stats", icon: BarChart3 },
+] as const;
+
+const PRODUCT_SUB = [
+  { key: "list", label: "All Products" },
+  { key: "categories", label: "Categories" },
 ] as const;
 
 export default function AdminApp() {
@@ -58,7 +64,12 @@ export default function AdminApp() {
   }
 
   const activeKey: View = view === "form" ? "list" : view;
-  const title = view === "form" ? (editing ? "Edit product" : "Add product") : (NAV.find((n) => n.key === activeKey)?.label ?? "Products");
+  const inProducts = activeKey === "list" || activeKey === "categories";
+  const title = view === "form"
+    ? (editing ? "Edit product" : "Add product")
+    : view === "categories"
+    ? "Categories"
+    : (NAV.find((n) => n.key === activeKey)?.label ?? "Products");
 
   const list = (products ?? []).filter(
     (p) => !q || p.name.toLowerCase().includes(q.toLowerCase()) || p.categoryName.toLowerCase().includes(q.toLowerCase()) || p.boxTypeName.toLowerCase().includes(q.toLowerCase())
@@ -81,16 +92,35 @@ export default function AdminApp() {
 
       <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         {NAV.map(({ key, label, icon: Icon }) => (
-          <button
-            key={key}
-            type="button"
-            onClick={() => go(key)}
-            className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition ${
-              activeKey === key ? "bg-brand text-white shadow-[var(--shadow-brand)]" : "text-ink-soft hover:bg-surface hover:text-ink"
-            }`}
-          >
-            <Icon size={18} /> {label}
-          </button>
+          <div key={key}>
+            <button
+              type="button"
+              onClick={() => go(key)}
+              className={`flex w-full items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-semibold transition ${
+                key === "list"
+                  ? inProducts ? "text-brand" : "text-ink-soft hover:bg-surface hover:text-ink"
+                  : activeKey === key ? "bg-brand text-white shadow-[var(--shadow-brand)]" : "text-ink-soft hover:bg-surface hover:text-ink"
+              }`}
+            >
+              <Icon size={18} /> {label}
+            </button>
+            {key === "list" && inProducts && (
+              <div className="mt-1 space-y-1 pl-5">
+                {PRODUCT_SUB.map((sub) => (
+                  <button
+                    key={sub.key}
+                    type="button"
+                    onClick={() => go(sub.key as View)}
+                    className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition ${
+                      activeKey === sub.key ? "bg-brand-soft text-brand" : "text-ink-soft hover:bg-surface hover:text-ink"
+                    }`}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-current opacity-70" /> {sub.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
       </nav>
 
@@ -141,7 +171,9 @@ export default function AdminApp() {
         </header>
 
         <div className="p-4 md:p-6">
-          {view === "customize" ? (
+          {view === "categories" ? (
+            <CategoriesPanel />
+          ) : view === "customize" ? (
             <CustomizePanel />
           ) : view === "stats" ? (
             <StatsPanel />
