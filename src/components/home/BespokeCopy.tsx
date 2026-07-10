@@ -94,12 +94,12 @@ export default function BespokeCopy() {
           <div className="pointer-events-none absolute -left-10 top-10 h-48 w-48 rounded-full bg-brand/20 blur-3xl" />
           <div className="pointer-events-none absolute bottom-6 right-6 h-40 w-40 rounded-full bg-pink-400/20 blur-3xl" />
           <div className="absolute inset-0 grid place-items-center p-8">
-            <div className="grid grid-cols-2 items-center gap-4">
+            <div className="bespoke-stage grid grid-cols-2 items-center gap-4">
               {CLUSTER.map((t, i) => (
                 <div
                   key={i}
-                  className={`overflow-hidden rounded-3xl bg-white/70 p-3 shadow-2xl ring-1 ring-black/5 backdrop-blur ${t.cls}`}
-                  style={{ rotate: t.rot }}
+                  className={`bespoke-box overflow-hidden rounded-3xl bg-white/70 p-3 shadow-2xl ring-1 ring-black/5 backdrop-blur ${t.cls}`}
+                  style={{ rotate: t.rot, animationDelay: `${i * 0.7}s` }}
                 >
                   <BoxMockup colorway={t.box} label={t.box.name} />
                 </div>

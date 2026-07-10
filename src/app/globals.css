@@ -166,3 +166,16 @@ body {
   animation: hero-caret-blink 1s steps(1) infinite;
 }
 @keyframes hero-caret-blink { 50% { opacity: 0; } }
+
+/* Bespoke section — continuous 3D float on the box tiles */
+.bespoke-stage { perspective: 1000px; }
+.bespoke-box {
+  transform-style: preserve-3d;
+  animation: bespoke-float 5.5s ease-in-out infinite;
+  will-change: transform;
+}
+@keyframes bespoke-float {
+  0%, 100% { transform: translateY(0) rotateX(0deg) rotateY(0deg); }
+  50%      { transform: translateY(-16px) rotateX(8deg) rotateY(-12deg); }
+}
+@media (prefers-reduced-motion: reduce) { .bespoke-box { animation: none; } }
