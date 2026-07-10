@@ -8,7 +8,8 @@
       "Bash(rm -f data/products.json data/events.json data/presence.json data/*.json)",
       "Bash(cat .env.local)",
       "Bash(ls public/)",
-      "Bash(node _final.mjs)"
+      "Bash(node _final.mjs)",
+      "Bash(curl -s -H \"Cookie: cb_admin=CBP-admin-2026!\" -o /dev/null -w \"settings:%{http_code}\\\\n\" --max-time 60 http://localhost:3941/api/admin/settings)"
     ],
     "additionalDirectories": [
       "c:\\Users\\tmasl\\.claude\\projects\\c--xampp-htdocs-customboxes\\memory"

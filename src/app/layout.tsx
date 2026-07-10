@@ -6,6 +6,7 @@ import { getSettings } from "@/lib/settings";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import MobileTabBar from "@/components/layout/MobileTabBar";
+import ChromeGate from "@/components/layout/ChromeGate";
 import Tracker from "@/components/analytics/Tracker";
 import Presence from "@/components/analytics/Presence";
 import ScrollAnimations from "@/components/anim/ScrollAnimations";
@@ -59,11 +60,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Tracker />
           <Presence />
           <ScrollAnimations />
-          <Header settings={s} />
+          <ChromeGate><Header settings={s} /></ChromeGate>
           <main className="flex-1">{children}</main>
-          <Footer settings={s} />
-          <div className="h-14 lg:hidden" aria-hidden />
-          <MobileTabBar />
+          <ChromeGate>
+            <Footer settings={s} />
+            <div className="h-14 lg:hidden" aria-hidden />
+            <MobileTabBar />
+          </ChromeGate>
           <CartDrawer />
         </CartProvider>
       </body>
