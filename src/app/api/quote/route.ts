@@ -1,11 +1,15 @@
 import { NextResponse } from "next/server";
 import { appendSubmission, makeRef } from "@/lib/submissions";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export async function POST(req: Request) {
   try {
     const b = await req.json();
     if (!b.name || !b.email) {
       return NextResponse.json({ ok: false, error: "Name and email are required." }, { status: 400 });
+    }
+    if (!(await verifyTurnstile(b.turnstileToken, req.headers.get("CF-Connecting-IP")))) {
+      return NextResponse.json({ ok: false, error: "Captcha verification failed. Please try again." }, { status: 400 });
     }
     const ref = makeRef("QTE");
     const quote = {

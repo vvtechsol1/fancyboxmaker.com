@@ -11,6 +11,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { categories } from "@/data/taxonomy";
+import Turnstile from "@/components/Turnstile";
 
 const PROCESS: { icon: LucideIcon; title: string; text: string }[] = [
   {
@@ -74,6 +75,7 @@ export default function GetInTouch() {
   const [status, setStatus] = useState<Status>("idle");
   const [ref, setRef] = useState("");
   const [error, setError] = useState("");
+  const [token, setToken] = useState("");
 
   const set = (key: keyof typeof f) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -101,6 +103,7 @@ export default function GetInTouch() {
           finishes: [f.surface],
           notes: f.notes,
           company: "",
+          turnstileToken: token,
         }),
       });
       const data = await res.json();
@@ -272,9 +275,11 @@ export default function GetInTouch() {
                   <p className="text-sm font-medium text-red-600">{error}</p>
                 )}
 
+                <Turnstile onVerify={setToken} />
+
                 <button
                   type="submit"
-                  disabled={status === "sending"}
+                  disabled={status === "sending" || !token}
                   className="w-full rounded-full py-3 text-sm font-bold uppercase tracking-wide text-white transition hover:brightness-95 disabled:opacity-60"
                   style={{ background: "var(--color-brand)" }}
                 >

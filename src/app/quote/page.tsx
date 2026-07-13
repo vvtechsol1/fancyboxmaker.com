@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { CheckCircle2, Loader2, Sparkles, PenTool, Truck, BadgeCheck } from "lucide-react";
 import { categories } from "@/data/taxonomy";
+import Turnstile from "@/components/Turnstile";
 
 const MATERIALS = [
   "Kraft paperboard",
@@ -20,6 +21,7 @@ export default function QuotePage() {
   const [error, setError] = useState("");
   const [ref, setRef] = useState<string | null>(null);
   const [finishes, setFinishes] = useState<string[]>([]);
+  const [token, setToken] = useState("");
 
   const [f, setF] = useState({
     boxType: "", length: "", width: "", depth: "", unit: "in",
@@ -39,7 +41,7 @@ export default function QuotePage() {
       const res = await fetch("/api/quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...f, finishes }),
+        body: JSON.stringify({ ...f, finishes, turnstileToken: token }),
       });
       const data = await res.json();
       if (data.ok) setRef(data.ref);
@@ -169,7 +171,9 @@ export default function QuotePage() {
 
           {error && <p className="rounded-lg bg-brand-soft px-4 py-2 text-sm font-medium text-brand">{error}</p>}
 
-          <button disabled={saving} className="flex w-full items-center justify-center gap-2 rounded-full bg-brand py-3.5 text-base font-semibold text-white shadow-[var(--shadow-brand)] hover:bg-brand-dark disabled:opacity-60 md:w-auto md:px-10">
+          <Turnstile onVerify={setToken} />
+
+          <button disabled={saving || !token} className="flex w-full items-center justify-center gap-2 rounded-full bg-brand py-3.5 text-base font-semibold text-white shadow-[var(--shadow-brand)] hover:bg-brand-dark disabled:opacity-60 md:w-auto md:px-10">
             {saving && <Loader2 size={18} className="animate-spin" />}
             {saving ? "Submitting…" : "Request my free quote"}
           </button>
